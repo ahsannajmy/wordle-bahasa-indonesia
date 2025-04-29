@@ -1,8 +1,25 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KATA-in
 
-## Getting Started
+An application with next js based on wordle game but with Bahasa Indonesia. Build with Next JS and Tailwind CSS and some others react library.
 
-First, run the development server:
+### Features
+
+- KATA-in produce different word each day with the help of this [repository][KATA-in db] and with a little bit of filter to extract only the 5 unique words.
+- KATA-in can also check is the word appropriate with the KBBI with the help of an API from this [repository][KATA-in api-word-check]
+
+[//]: # "Below are the helper link for this app"
+[KATA-in db]: https://github.com/dyazincahya/KBBI-SQL-database
+[KATA-in api-word-check]: https://github.com/raf555/kbbi-api
+
+### Usage
+
+First, install the dependencies
+
+```
+npm install
+```
+
+Then, run the development server
 
 ```bash
 npm run dev
@@ -14,23 +31,4 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+open [http://localhost:3000](http://localhost:3000) to see the result
