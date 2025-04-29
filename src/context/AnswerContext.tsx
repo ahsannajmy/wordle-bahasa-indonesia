@@ -4,6 +4,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 interface AnswerContextType {
   answer: string;
+  isError: boolean;
+  setIsError: (cond: boolean) => void;
   posH: number;
   setPosH: (val: number) => void;
   posV: number;
@@ -15,6 +17,7 @@ interface AnswerContextType {
 const AnswerContext = createContext<AnswerContextType | undefined>(undefined);
 
 export function AnswerProvider({ children }: { children: React.ReactNode }) {
+  const [isError, setIsError] = useState(false);
   const [answer, setAnswer] = useState("");
   const [posH, setPosH] = useState(0);
   const [posV, setPosV] = useState(0);
@@ -39,7 +42,17 @@ export function AnswerProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AnswerContext.Provider
-      value={{ posH, setPosH, posV, setPosV, guesses, setGuesses, answer }}
+      value={{
+        posH,
+        setPosH,
+        posV,
+        setPosV,
+        guesses,
+        setGuesses,
+        answer,
+        isError,
+        setIsError,
+      }}
     >
       {children}
     </AnswerContext.Provider>

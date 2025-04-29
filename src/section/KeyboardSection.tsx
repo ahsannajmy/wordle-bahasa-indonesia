@@ -38,46 +38,60 @@ const getWord = (letters: Guess[]) => {
 };
 
 export default function Keyboard() {
-  const { guesses, setPosH, setPosV, setGuesses, posH, posV, answer } =
-    useAnswerContext();
+  const {
+    guesses,
+    setPosH,
+    setPosV,
+    setGuesses,
+    posH,
+    posV,
+    answer,
+    setIsError,
+  } = useAnswerContext();
 
-  const checkWord = async (word: string) => {
-    const response = await fetch(
-      `https://kbbi.raf555.dev/api/v1/entry/${word}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const data = await response.json();
-    return data.ok;
+  const animateError = () => {
+    setIsError(true);
+    return;
   };
 
-  const handleKeyPress = (e: KeyboardEvent) => {
+  const checkWord = async (word: string) => {
+    const response = await fetch(`/api/word-check?word=${word}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    return response.ok;
+  };
+
+  const handleKeyPress = async (e: KeyboardEvent) => {
     const key = e.key.toUpperCase();
     if (key === "ENTER") {
+      const input = guesses[posV].map((guess) => guess.letter).join("");
       if (getWord(guesses[posV]).length != 5) {
-        toast.error("Fill the answer properly");
+        animateError();
+        toast.error("Isi kata dengan lengkap");
         return;
       }
-      const isWord = checkWord(
-        guesses[posV].map((guess) => guess.letter).join("")
-      );
+      const isWord = await checkWord(input);
       if (!isWord) {
-        toast.error("Not a word");
+        animateError();
+        toast.error(`${input} tidak terdaftar di KBBI`);
+        return;
       }
       const newGuessesStatus = checkAnswer(posV, guesses, answer);
       setGuesses(newGuessesStatus);
       setPosH(0);
       setPosV(posV + 1);
     } else if (key === "BACKSPACE" && posH !== 0) {
+      setIsError(false);
       const newPosH = posH - 1;
       const newGuesses = updateGuess(newPosH, posV, "", guesses);
       setPosH(newPosH);
       setGuesses(newGuesses);
     } else if (posH <= 4 && /^[A-Z]$/.test(key)) {
+      setIsError(false);
       const newGuesses = updateGuess(posH, posV, key, guesses);
       setGuesses(newGuesses);
       setPosH(posH + 1);
