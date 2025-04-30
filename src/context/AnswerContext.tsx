@@ -1,10 +1,12 @@
 "use client";
-import { Guess } from "@/interface/models";
+import { Alphabet, Guess, KeyboardStatus } from "@/interface/models";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface AnswerContextType {
   answer: string;
   isError: boolean;
+  keyboardStatus: KeyboardStatus;
+  setKeyboardStatus: (val: KeyboardStatus) => void;
   setIsError: (cond: boolean) => void;
   posH: number;
   setPosH: (val: number) => void;
@@ -18,6 +20,15 @@ const AnswerContext = createContext<AnswerContextType | undefined>(undefined);
 
 export function AnswerProvider({ children }: { children: React.ReactNode }) {
   const [isError, setIsError] = useState(false);
+  const [keyboardStatus, setKeyboardStatus] = useState<KeyboardStatus>(
+    () =>
+      Object.fromEntries(
+        Array.from({ length: 26 }, (_, i) => [
+          String.fromCharCode(65 + i) as Alphabet,
+          "GRAY",
+        ])
+      ) as KeyboardStatus
+  );
   const [answer, setAnswer] = useState("");
   const [posH, setPosH] = useState(0);
   const [posV, setPosV] = useState(0);
@@ -26,6 +37,7 @@ export function AnswerProvider({ children }: { children: React.ReactNode }) {
       Array.from({ length: 5 }, () => ({
         letter: "",
         status: "GRAY",
+        justTyped: false,
       }))
     )
   );
@@ -52,6 +64,8 @@ export function AnswerProvider({ children }: { children: React.ReactNode }) {
         answer,
         isError,
         setIsError,
+        keyboardStatus,
+        setKeyboardStatus,
       }}
     >
       {children}

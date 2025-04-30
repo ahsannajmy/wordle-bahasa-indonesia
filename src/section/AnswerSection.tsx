@@ -24,7 +24,7 @@ export default function Answer() {
       return BG_STATUS[status].concat(" text-background border-none");
     }
     if (letter !== "" && status === "GRAY") {
-      return "border-gray-600 animate-pop";
+      return "border-gray-600";
     }
     return "";
   };
@@ -43,6 +43,7 @@ export default function Answer() {
                   guess.letter,
                   rowIndex
                 )}
+                justTyped={guess.justTyped}
               />
             ))}
           </div>

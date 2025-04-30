@@ -1,11 +1,12 @@
-import { Guess, Status } from "@/interface/models";
+import { Alphabet, Guess, KeyboardStatus, Status } from "@/interface/models";
 
-export function checkAnswer(posV: number, guesses: Guess[][], answer: string) {
-  const updateStatus = (
-    input: string,
-    letterBaseline: string,
-    wordBaseline: string
-  ): Status => {
+export function checkAnswer(
+  posV: number, // posisi row sekarang
+  guesses: Guess[][], // kumpulan kata guess
+  answer: string, // baseline jawaban
+  keyboardStatus: KeyboardStatus // status keyboard
+) {
+  const updateStatus = (input: string, letterBaseline: string): Status => {
     if (input === letterBaseline) {
       return "GREEN";
     }
@@ -19,8 +20,7 @@ export function checkAnswer(posV: number, guesses: Guess[][], answer: string) {
       if (rowIndex === posV) {
         const updatedStatus = updateStatus(
           cell.letter,
-          answer.charAt(cellIndex),
-          answer
+          answer.charAt(cellIndex)
         );
         if (updatedStatus === "GREEN") listGreenWord.push(cell.letter);
         return {
@@ -54,5 +54,17 @@ export function checkAnswer(posV: number, guesses: Guess[][], answer: string) {
     })
   ) as Guess[][];
 
-  return newGuessesStatus;
+  newGuessesStatus[posV].map((letter, index) => {
+    if (
+      keyboardStatus[letter.letter as Alphabet] !== "BLACK" ||
+      keyboardStatus[letter.letter as Alphabet] !== "GREEN"
+    ) {
+      keyboardStatus[letter.letter as Alphabet] = letter.status;
+    }
+  });
+
+  return {
+    newGuessesStatus,
+    newKeyboardStatus: keyboardStatus,
+  };
 }

@@ -1,9 +1,9 @@
 "use client";
 import KeyboardBox from "@/components/KeyboardBox";
 import { useAnswerContext } from "@/context/AnswerContext";
-import { Guess } from "@/interface/models";
+import { Alphabet, Guess } from "@/interface/models";
 import { checkAnswer } from "@/utils/checkAnswer";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { toast } from "sonner";
 
 const cols = {
@@ -24,6 +24,12 @@ const updateGuess = (
         return {
           ...cell,
           letter: letter,
+          justTyped: letter !== "", // backspace or remove word set to false so that animate pop not shown
+        };
+      } else if (rowIndex === posV) {
+        return {
+          ...cell,
+          justTyped: false,
         };
       }
       return cell;
@@ -37,6 +43,13 @@ const getWord = (letters: Guess[]) => {
   return words;
 };
 
+const keyboardStatusStyle = {
+  GRAY: "bg-gray-300 text-foreground",
+  BLACK: "bg-gray-600 text-background",
+  GREEN: "bg-green-600 text-background",
+  YELLOW: "bg-yellow-600 text-background",
+};
+
 export default function Keyboard() {
   const {
     guesses,
@@ -47,6 +60,8 @@ export default function Keyboard() {
     posV,
     answer,
     setIsError,
+    keyboardStatus,
+    setKeyboardStatus,
   } = useAnswerContext();
 
   const animateError = () => {
@@ -61,7 +76,6 @@ export default function Keyboard() {
         "Content-Type": "application/json",
       },
     });
-    const data = await response.json();
     return response.ok;
   };
 
@@ -80,8 +94,14 @@ export default function Keyboard() {
         toast.error(`${input} tidak terdaftar di KBBI`);
         return;
       }
-      const newGuessesStatus = checkAnswer(posV, guesses, answer);
+      const { newGuessesStatus, newKeyboardStatus } = checkAnswer(
+        posV,
+        guesses,
+        answer,
+        keyboardStatus
+      );
       setGuesses(newGuessesStatus);
+      setKeyboardStatus(newKeyboardStatus);
       setPosH(0);
       setPosV(posV + 1);
     } else if (key === "BACKSPACE" && posH !== 0) {
@@ -132,6 +152,10 @@ export default function Keyboard() {
                   letter={word}
                   key={index}
                   keyboadClick={handleKeyboardClick}
+                  statusStyle={
+                    keyboardStatusStyle[keyboardStatus[word as Alphabet]] ||
+                    "bg-gray-300"
+                  }
                 />
               ))}
             </div>
