@@ -57,8 +57,15 @@ export function checkAnswer(
     }
   });
 
+  const resetJustTyped = newGuessesStatus.map((row, _) =>
+    row.map((cell) => ({
+      ...cell,
+      justTyped: false,
+    }))
+  );
+
   return {
-    newGuessesStatus,
+    newGuessesStatus: resetJustTyped,
     newKeyboardStatus: keyboardStatus,
   };
 }

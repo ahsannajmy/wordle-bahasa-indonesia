@@ -23,15 +23,17 @@ const keyboardStatusStyle = {
 export default function Keyboard() {
   const {
     guesses,
-    setPosH,
-    setPosV,
-    setGuesses,
     posH,
     posV,
     answer,
-    setIsError,
     keyboardStatus,
+    setPosH,
+    setPosV,
+    setGuesses,
+    setChecked,
+    setIsError,
     setKeyboardStatus,
+    setFinished,
   } = useAnswerContext();
 
   const animateError = () => {
@@ -73,22 +75,28 @@ export default function Keyboard() {
       setGuesses(newGuessesStatus);
       setKeyboardStatus(newKeyboardStatus);
       if (finalResult(newGuessesStatus[posV])) {
-        toast.success("Kata berhasil ditemukan");
+        setFinished(true);
         return;
       }
       if (posV === 5) {
-        toast.error(`Percobaan habis ${answer} adalah kata hari ini`);
+        setFinished(true);
         return;
       }
-      setPosH(0);
-      setPosV(posV + 1);
+      setChecked(true);
+      setTimeout(() => {
+        setChecked(false);
+        setPosH(0);
+        setPosV(posV + 1);
+      }, 2500);
     } else if (key === "BACKSPACE" && posH !== 0) {
+      setChecked(false);
       setIsError(false);
       const newPosH = posH - 1;
       const newGuesses = updateGuess(newPosH, posV, "", guesses);
       setPosH(newPosH);
       setGuesses(newGuesses);
     } else if (posH <= 4 && /^[A-Z]$/.test(key)) {
+      setChecked(false);
       setIsError(false);
       const newGuesses = updateGuess(posH, posV, key, guesses);
       setGuesses(newGuesses);

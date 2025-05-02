@@ -5,7 +5,7 @@ import { useAnswerContext } from "@/context/AnswerContext";
 import { Status } from "@/interface/models";
 
 export default function Answer() {
-  const { guesses, posV, isError } = useAnswerContext();
+  const { guesses, posV, isError, checked } = useAnswerContext();
   const BG_STATUS = {
     BLACK: "bg-gray-600",
     GREEN: "bg-green-600",
@@ -18,7 +18,7 @@ export default function Answer() {
     rowIndex: number
   ) => {
     if (isError && rowIndex === posV) {
-      return "border-red-600 text-red-600";
+      return "border-red-600 text-red-600 animate-shake";
     }
     if (status !== "GRAY") {
       return BG_STATUS[status].concat(" text-background border-none");
@@ -44,6 +44,8 @@ export default function Answer() {
                   rowIndex
                 )}
                 justTyped={guess.justTyped}
+                index={cellIndex}
+                checked={checked && rowIndex === posV}
               />
             ))}
           </div>

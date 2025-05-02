@@ -4,6 +4,10 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 interface AnswerContextType {
   answer: string;
+  checked: boolean;
+  setChecked: (val: boolean) => void;
+  finished: boolean;
+  setFinished: (val: boolean) => void;
   isError: boolean;
   keyboardStatus: KeyboardStatus;
   setKeyboardStatus: (val: KeyboardStatus) => void;
@@ -19,6 +23,8 @@ interface AnswerContextType {
 const AnswerContext = createContext<AnswerContextType | undefined>(undefined);
 
 export function AnswerProvider({ children }: { children: React.ReactNode }) {
+  const [checked, setChecked] = useState(false);
+  const [finished, setFinished] = useState(false);
   const [isError, setIsError] = useState(false);
   const [keyboardStatus, setKeyboardStatus] = useState<KeyboardStatus>(
     () =>
@@ -56,6 +62,10 @@ export function AnswerProvider({ children }: { children: React.ReactNode }) {
   return (
     <AnswerContext.Provider
       value={{
+        checked,
+        setChecked,
+        finished,
+        setFinished,
         posH,
         setPosH,
         posV,
