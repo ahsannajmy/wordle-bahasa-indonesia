@@ -5,38 +5,8 @@ import { Alphabet, Guess } from "@/interface/models";
 import { checkAnswer } from "@/utils/checkAnswer";
 import { useEffect } from "react";
 import { toast } from "sonner";
-
-const cols = {
-  row_1: ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
-  row_2: ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
-  row_3: ["ENTER", "Z", "X", "C", "V", "B", "N", "M", "<="],
-};
-
-const updateGuess = (
-  posH: number,
-  posV: number,
-  letter: string,
-  guesses: Guess[][]
-) => {
-  const newGuesses = guesses.map((row, rowIndex) =>
-    row.map((cell, cellIndex) => {
-      if (rowIndex === posV && cellIndex === posH) {
-        return {
-          ...cell,
-          letter: letter,
-          justTyped: letter !== "", // backspace or remove word set to false so that animate pop not shown
-        };
-      } else if (rowIndex === posV) {
-        return {
-          ...cell,
-          justTyped: false,
-        };
-      }
-      return cell;
-    })
-  );
-  return newGuesses;
-};
+import { cols } from "@/utils/placeholder";
+import { finalResult, updateGuess } from "@/utils/updateAnswer";
 
 const getWord = (letters: Guess[]) => {
   const words = letters.map((letter) => letter.letter).join("");
@@ -102,6 +72,14 @@ export default function Keyboard() {
       );
       setGuesses(newGuessesStatus);
       setKeyboardStatus(newKeyboardStatus);
+      if (finalResult(newGuessesStatus[posV])) {
+        toast.success("Kata berhasil ditemukan");
+        return;
+      }
+      if (posV === 5) {
+        toast.error(`Percobaan habis ${answer} adalah kata hari ini`);
+        return;
+      }
       setPosH(0);
       setPosV(posV + 1);
     } else if (key === "BACKSPACE" && posH !== 0) {

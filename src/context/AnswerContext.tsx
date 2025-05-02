@@ -47,6 +47,7 @@ export function AnswerProvider({ children }: { children: React.ReactNode }) {
       const response = await fetch("/api/words");
       const data = await response.json();
       const todayWord: string = data.word;
+      console.log(data);
       setAnswer(todayWord.toUpperCase());
     }
     getTodayAnswer();

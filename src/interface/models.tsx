@@ -36,3 +36,10 @@ export interface Guess {
   status: Status;
   justTyped: boolean;
 }
+
+export interface Words {
+  arti: string;
+  type: number;
+  word: string;
+  _id: number;
+}

@@ -1,4 +1,5 @@
 import { Alphabet, Guess, KeyboardStatus, Status } from "@/interface/models";
+import { updateStatus } from "./updateAnswer";
 
 export function checkAnswer(
   posV: number, // posisi row sekarang
@@ -6,13 +7,6 @@ export function checkAnswer(
   answer: string, // baseline jawaban
   keyboardStatus: KeyboardStatus // status keyboard
 ) {
-  const updateStatus = (input: string, letterBaseline: string): Status => {
-    if (input === letterBaseline) {
-      return "GREEN";
-    }
-    return "GRAY";
-  };
-
   const listGreenWord: string[] = [];
 
   const greenGuesses = guesses.map((row, rowIndex) =>
