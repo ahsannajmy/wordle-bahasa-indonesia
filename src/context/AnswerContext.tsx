@@ -1,8 +1,9 @@
 "use client";
-import { Alphabet, Guess, KeyboardStatus } from "@/interface/models";
+import { Alphabet, Guess, KeyboardStatus, Words } from "@/interface/models";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface AnswerContextType {
+  answerAttribute: Words;
   answer: string;
   success: boolean;
   setSuccess: (val: boolean) => void;
@@ -25,6 +26,12 @@ interface AnswerContextType {
 const AnswerContext = createContext<AnswerContextType | undefined>(undefined);
 
 export function AnswerProvider({ children }: { children: React.ReactNode }) {
+  const [answerAttribute, setAnswerAttribute] = useState<Words>({
+    _id: -1,
+    arti: "",
+    type: -1,
+    word: "",
+  });
   const [success, setSuccess] = useState(false);
   const [checked, setChecked] = useState(false);
   const [finished, setFinished] = useState(false);
@@ -56,7 +63,7 @@ export function AnswerProvider({ children }: { children: React.ReactNode }) {
       const response = await fetch("/api/words");
       const data = await response.json();
       const todayWord: string = data.word;
-      console.log(data);
+      setAnswerAttribute(data);
       setAnswer(todayWord.toUpperCase());
     }
     getTodayAnswer();
@@ -65,6 +72,7 @@ export function AnswerProvider({ children }: { children: React.ReactNode }) {
   return (
     <AnswerContext.Provider
       value={{
+        answerAttribute,
         success,
         setSuccess,
         checked,

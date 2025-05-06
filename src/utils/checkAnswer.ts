@@ -50,7 +50,7 @@ export function checkAnswer(
 
   newGuessesStatus[posV].map((letter, index) => {
     if (
-      keyboardStatus[letter.letter as Alphabet] !== "BLACK" ||
+      keyboardStatus[letter.letter as Alphabet] !== "BLACK" &&
       keyboardStatus[letter.letter as Alphabet] !== "GREEN"
     ) {
       keyboardStatus[letter.letter as Alphabet] = letter.status;
