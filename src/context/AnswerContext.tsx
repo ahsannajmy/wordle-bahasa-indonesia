@@ -4,6 +4,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 interface AnswerContextType {
   answer: string;
+  success: boolean;
+  setSuccess: (val: boolean) => void;
   checked: boolean;
   setChecked: (val: boolean) => void;
   finished: boolean;
@@ -23,6 +25,7 @@ interface AnswerContextType {
 const AnswerContext = createContext<AnswerContextType | undefined>(undefined);
 
 export function AnswerProvider({ children }: { children: React.ReactNode }) {
+  const [success, setSuccess] = useState(false);
   const [checked, setChecked] = useState(false);
   const [finished, setFinished] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -62,6 +65,8 @@ export function AnswerProvider({ children }: { children: React.ReactNode }) {
   return (
     <AnswerContext.Provider
       value={{
+        success,
+        setSuccess,
         checked,
         setChecked,
         finished,

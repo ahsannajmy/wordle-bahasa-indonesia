@@ -12,7 +12,7 @@ export default function LetterBox(props: LetterBoxProps) {
       className={`box-border border-2 border-gray-300 size-16 p-4 flex items-center justify-center 
         ${props.justTyped ? "animate-pop" : ""} 
         ${props.styleCondition} 
-        ${props.checked ? "animate-flipV" : ""}`}
+        ${props.checked ? `animate-flipV` : ""}`}
       style={{
         animationDelay: props.checked ? `${props.index * 0.5}s` : undefined,
       }}

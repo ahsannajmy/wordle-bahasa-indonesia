@@ -27,6 +27,7 @@ export default function Keyboard() {
     posV,
     answer,
     keyboardStatus,
+    setSuccess,
     setPosH,
     setPosV,
     setGuesses,
@@ -76,6 +77,7 @@ export default function Keyboard() {
       setKeyboardStatus(newKeyboardStatus);
       if (finalResult(newGuessesStatus[posV])) {
         setFinished(true);
+        setSuccess(true);
         return;
       }
       if (posV === 5) {
