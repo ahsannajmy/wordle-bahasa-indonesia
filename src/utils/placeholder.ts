@@ -4,4 +4,4 @@ export const cols = {
   row_3: ["ENTER", "Z", "X", "C", "V", "B", "N", "M", "<="],
 };
 
-export const todayWord = `words:${new Date().getDate()} - ${new Date().getMonth()} - ${new Date().getFullYear()}`;
+export const today = new Date().toISOString().split("T")[0];
