@@ -48,12 +48,13 @@ export function checkAnswer(
     })
   ) as Guess[][];
 
-  newGuessesStatus[posV].map((letter, index) => {
-    if (
-      keyboardStatus[letter.letter as Alphabet] !== "BLACK" &&
-      keyboardStatus[letter.letter as Alphabet] !== "GREEN"
-    ) {
+  newGuessesStatus[posV].map((letter, _) => {
+    if (keyboardStatus[letter.letter as Alphabet] === "GRAY") {
       keyboardStatus[letter.letter as Alphabet] = letter.status;
+    } else {
+      if (letter.status === "GREEN") {
+        keyboardStatus[letter.letter as Alphabet] = letter.status;
+      }
     }
   });
 

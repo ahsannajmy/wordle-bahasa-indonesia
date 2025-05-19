@@ -7,7 +7,11 @@ import { Words } from "@/interface/models";
 
 export async function GET() {
   try {
-    const checkRedisWord = await client.hGetAll(todayWord);
+    const filePath = join(process.cwd(), "src/data/available-word.json");
+    const contents = await readFile(filePath, "utf-8");
+    const words: Words[] = JSON.parse(contents).dictionary;
+    const randomWord: Words = words[Math.floor(Math.random() * words.length)];
+    const checkRedisWord = await client.hGetAll(randomWord.word);
     if (checkRedisWord && Object.keys(checkRedisWord).length > 0) {
       return NextResponse.json({
         arti: checkRedisWord.arti,
@@ -16,11 +20,7 @@ export async function GET() {
         _id: parseInt(checkRedisWord._id as string),
       });
     }
-    const filePath = join(process.cwd(), "src/data/available-word.json");
-    const contents = await readFile(filePath, "utf-8");
-    const words: Words[] = JSON.parse(contents).dictionary;
-    const randomWord: Words = words[Math.floor(Math.random() * words.length)];
-    await client.hSet(todayWord, {
+    await client.hSet(randomWord.word, {
       arti: randomWord.arti,
       type: randomWord.type,
       word: randomWord.word,
